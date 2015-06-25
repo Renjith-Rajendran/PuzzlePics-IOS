@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="format-detection" content="telephone=no">
+            <meta name="msapplication-tap-highlight" content="no">
+                <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+                    <!-- <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />-->
+                    <title>PicPuzzle</title>
+                    <!-- Bootstrap -->
+                    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+                        <link rel="stylesheet" type="text/css" href="css/index.css">
+                            <!-- <link rel="stylesheet" type="text/css" href="css/android.css">-->
+                            <link rel="stylesheet" type="text/css" href="css/ios.css">
+                                </head>
+    <body>
+        <div class="layout">
+            <!--<div class="loading"></div>-->
+            <div class="homePage animatedlinear fadeInRight" style="display:none;">
+                <span class="play animated pulse" id="play"><a href="#"><img src="images/play.png"/></a></span>
+                <div class="homePageButton proVersion">Pro Version</div>
+                <a href="#" class="homePageButton info"><img src="images/info.png" /> </a>
+                <div class="homePageButton settings">Settings</div>
+                <div class="infoMsg">If you receive image from your friend <a href="#" id="playWithCode">Click here </a>to play</div>
+            </div>
+            <div class="imgSelectPage paddingTop animatedlinear fadeInRight" style="display:none;" id="imgSelectPage">
+                <div class="pageHeader">
+                    <div class="tableCover">
+                        <span class="tableCell text-left">
+                            <a href="#" class="links navImageBackButton">Back</a>
+                        </span>
+                    </div>
+                </div>
+                <div class="tableCell">
+                    <ul class="button">
+                        <li><a href="#" class="takePicture reduceTextSize"  onclick="snapPicture()">Take Picture</a></li>
+                        <li><a href="#" class="openGallery reduceTextSize" onclick="getPhoto(pictureSource.PHOTOLIBRARY);">Choose from Gallery</a></li>
+                    </ul>
+                    <br>
+                    <h3 class="whiteTitle">Available Images</h3>
+                    <div class="galleryCover"  style="overflow:hidden;">
+                        <div  id="slider">
+                            <ul class="gallery" id="galleryAvilabelList">
+                            </ul>
+                        </div>
+                        <a href="#" class="control_prev_first"> < </a>
+                            <a href="#" class="control_next_first"> > </a>
+                            </div>
+                    <h4 class="goldTitle">Paid Images</h4>
+                    <div class="galleryCover">
+                        <div  id="slider2">
+                            <ul class="gallery" id="galleryPaidlList">
+                                <li id="1">
+                                    <a   onClick=ImageClick("1") href="#"><img src="puzzlepictures/puzzle1.jpg"/></a>
+                                </li>
+                                <li id="2">
+                                    <a  onClick=ImageClick("2") href="#"><img src="puzzlepictures/puzzle2.jpg"/></a>
+                                </li>
+                                <li id="3">
+                                    <a   onClick=ImageClick("3") href="#"><img src="puzzlepictures/puzzle3.jpg"/></a>
+                                </li>
+                                <li id="4">
+                                    <a   onClick=ImageClick("4") href="#"><img src="puzzlepictures/puzzle4.jpg"/></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <a href="#" class="control_prev_second"> < </a>
+                            <a href="#" class="control_next_second"> > </a>
+                            </div>
+                    <h4 class="goldTitle">Received Images</h4>
+                    <div class="galleryCover">
+                        <div  id="slider3">
+                            <ul class="gallery" id="galleryReceivedlList">
+                                <li id="1">
+                                    <a   onClick=ImageClick("1") href="#"><img src="puzzlepictures/puzzle1.jpg"/></a>
+                                </li>
+                                <li id="2">
+                                    <a  onClick=ImageClick("2") href="#"><img src="puzzlepictures/puzzle2.jpg"/></a>
+                                </li>
+                                <li id="3">
+                                    <a   onClick=ImageClick("3") href="#"><img src="puzzlepictures/puzzle3.jpg"/></a>
+                                </li>
+                                <li id="4">
+                                    <a   onClick=ImageClick("4") href="#"><img src="puzzlepictures/puzzle4.jpg"/></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <a href="#" class="control_prev_third"> < </a>
+                            <a href="#" class="control_next_third"> > </a>
+                            </div>
+                </div>
+            </div>
+            <div class="chooseShapePage paddingTop animatedlinear fadeInRight" style="display:none;">
+                <div class="pageHeader">
+                    <div class="tableCover">
+                        <span class="tableCell text-left">
+                            <a href="#" class=" links navShapeBackButton">Back</a>
+                        </span>
+                        <span class="tableCell text-right">
+                        </span>
+                    </div>
+                </div>
+                <div class="tableCell">
+                    <ul class="shapes" id="shapes">
+                        <li id="1">
+                            Free
+                            <div><img src="images/sh1.png"/></div>
+                        </li>
+                       <!-- <li id="2">
+                            Free
+                            <div><img src="images/sh2.png"/></div>
+                        </li>-->
+                        <li id="3">
+                            Free
+                            <div><img src="images/sh3.png"/></div>
+                        </li>
+                        <li id="4">
+                            Purchased
+                            <div><img src="images/sh4.png"/></div>
+                        </li>
+                        <li id="5">
+                            Purchased
+                            <div><img src="images/sh6.png"/></div>
+                        </li>
+                        <li id="6">
+                            Purchased
+                            <div><img src="images/sh7.png"/></div>
+                        </li>
+                        <!--<li id="5">Free<div><img src="images/sh5.png"/></div></li>-->
+                        <!--<li id="8">Purchased<div><img src="images/sh8.png"/></div></li>-->
+                    </ul>
+                </div>
+            </div>
+            <div class="settingsPage paddingTop animatedlinear fadeInRight" style="display:none;">
+                <div class="pageHeader">
+                    <div class="tableCover">
+                        <span class="tableCell text-left">
+                            <a href="#" class="links navSettingsBackButton">Back</a>
+                        </span>
+                    </div>
+                </div>
+                <div class="tableCell text-center">
+                    <ul class="settingsButtons">
+                        <li>
+                            Sound
+                            <div id="settingsSound"><img src="images/soundOn.png"/></div>
+                        </li>
+                        <li>
+                            Rotate Pieces
+                            <div id="settingsRotation"><img src="images/autoRotateOff.png"/></div>
+                        </li>
+                        <li>
+                            Shape
+                            <div id="settingsShape"><img src="images/shape1.png"/></div>
+                        </li>
+                        <li>
+                            Level
+                            <div id="settingsLevel"><img src="images/hard.png"/></div>
+                        </li>
+                    </ul>
+                    <br><br>
+                    <a href="#" class="playGame buttonDefault">Play</a><br><br>
+                </div>
+            </div>
+            <div class="gamePage paddingTop animatedlinear fadeInRight" id="gamePage" style="display:none;">
+                <div class="pageHeader">
+                    <div class="tableCover">
+                        <span class="tableCell">
+                            <a href="#" style="color:#fff;">Level :<span class="styled-select">
+                                <select id="set-parts"></select>
+                            </span></a>
+                        </span>
+                        <span class="tableCell"><a href="#" style="color:#fff;">Time : <span id="clock">00:00:00</span></a></span>
+                    </div>
+                </div>
+                <div id="canvas-wrap" class="paddingTop">
+                    <canvas id="canvas"></canvas>
+                    <canvas class="hide" id="image"></canvas>
+                    <canvas class="hide" id="image-preview"></canvas>
+                </div>
+                <ul class="toolBar" id="game-options">
+                    <li class="showImg">
+                        <div id="show_preview"><img src="images/showImg.png"/>Show Image</div>
+                    </li>
+                    <li class="changeImg">
+                        <div id="change_image"><img src="images/changeImg.png"/>Change Image</div>
+                    </li>
+                    <li class="settingsMini">
+                        <div id="change_settings"><img src="images/settingsMini.png"/>Settings</div>
+                    </li>
+                    <li class="autoSolveMini">
+                        <div id="auto_solve"><img src="images/autoSolveMini.png" />Auto Solve</div>
+                    </li>
+                </ul>
+            </div>
+            <div class="registerPage paddingTop animatedlinear fadeInRight" style="display:none;">
+                <div class="pageHeader">
+                    <div class="tableCover">
+                        <span class="tableCell text-left"><a href="#" class="links">Register</a></span>
+                        <span class="tableCell text-right"></span>
+                    </div>
+                </div>
+                <div class="tableCell">
+                    <ul class="inputBoxes button">
+                        <li><input type="text" value="First Name"/></li>
+                        <li><input type="text" value="Last Name"/></li>
+                        <li><input type="text" value="Mobile No"/></li>
+                        <li><input type="text" value="Email"/></li>
+                        <li><input type="text" value="Password"/></li>
+                        <li><a href="#" class="registerButton">Register</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="popUpCov animatedSwing swing" style="display:none" id="congrat">
+                <div class="mask"></div>
+                <div class="tableCover">
+                    <div class="tableCell">
+                        <div class="popUpBox">
+                            <div id="congrat_message" style="display:none">
+                                <h2>Congratulations!</h2>
+                                <div>
+                                    <span class="goldText">You solved it in</span>
+                                    <br>
+                                    <h3><span id="time"></span></h3>
+                                    <br>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"><a href="#" id="popupPlay" class="buttonDefault">Play</a></div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"><a href="#"  id="popupPro" class="buttonDefault">Pro Version</a></div>
+                                </div>
+                                <!-- <div class="killMe">X</div>-->
+                            </div>
+                            <div class="imgPopUp" id="send_image" style="display:none">
+                                <img src="" id="picture" width="150" height="150"/>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"><a href="#" class="buttonDefault">Play</a></div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"><a href="#" class="buttonDefault">Send</a></div>
+                                </div>
+                                <div class="killMe">X</div>
+                            </div>
+                            <div class="proVersionPopUp" id="proversion_PopUp" style="display:none">
+                                <h2> ProVersion !!</h2>
+                                <div class="killMe">X</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/event-emiter.min.js"></script>
+        <script type="text/javascript" src="js/canvas-event.min.js"></script>
+        <script type="text/javascript" src="js/canvas-puzzle.min.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+    </body>
+</html>

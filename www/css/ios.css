@@ -1,0 +1,206 @@
+/* ----------- iPhone 4 and 4S ----------- */
+
+/* Portrait */
+@media only screen
+and (min-device-width: 320px)
+and (max-device-width: 480px)
+and (-webkit-min-device-pixel-ratio: 2)
+and (orientation: portrait) {
+}
+
+/* Landscape */
+@media only screen
+and (min-device-width: 320px)
+and (max-device-width: 480px)
+and (-webkit-min-device-pixel-ratio: 2)
+and (orientation: landscape) {
+    
+}
+
+/* ----------- iPhone 5 and 5S ----------- */
+
+/* Portrait */
+@media only screen
+and (min-device-width: 320px)
+and (max-device-width: 568px)
+and (-webkit-min-device-pixel-ratio: 2)
+and (orientation: portrait) {
+}
+
+/* Landscape */
+@media only screen
+and (min-device-width: 320px)
+and (max-device-width: 568px)
+and (-webkit-min-device-pixel-ratio: 2)
+and (orientation: landscape) {
+    
+}
+
+/* ----------- iPhone 6 ----------- */
+
+/* Portrait */
+@media only screen
+and (min-device-width: 375px)
+and (max-device-width: 667px)
+and (-webkit-min-device-pixel-ratio: 2)
+and (orientation: portrait) {
+    
+}
+
+/* Landscape */
+@media only screen
+and (min-device-width: 375px)
+and (max-device-width: 667px)
+and (-webkit-min-device-pixel-ratio: 2)
+and (orientation: landscape) {
+    
+}
+
+/* ----------- iPhone 6+ ----------- */
+
+/* Portrait */
+@media only screen
+and (min-device-width: 414px)
+and (max-device-width: 736px)
+and (-webkit-min-device-pixel-ratio: 3)
+and (orientation: portrait) {
+    
+}
+
+/* Landscape */
+@media only screen
+and (min-device-width: 414px)
+and (max-device-width: 736px)
+and (-webkit-min-device-pixel-ratio: 3)
+and (orientation: landscape) {
+    
+}
+/* ----------- iPad mini ----------- */
+/* ----------- iPad 1 and 2 ----------- */
+
+/* Portrait */
+@media only screen
+and (min-device-width: 768px)
+and (max-device-width: 1024px)
+and (orientation: portrait)
+and (-webkit-min-device-pixel-ratio: 1) {
+    canvas#canvas {
+        width: 700px;
+        height: 900px;
+        left: 2%;
+    }
+    canvas#image {
+        background-color: yellow;
+        width: 700px;
+        height: 900px;
+        left: 2%;
+    }
+    canvas#image-preview {
+        background-color: green;
+        width: 700px;
+        height: 900px;
+        left: 2%;
+    }
+
+.toolBar li div img {
+    width: 35%;
+}
+
+}
+
+/* Landscape */
+@media only screen
+and (min-device-width: 768px)
+and (max-device-width: 1024px)
+and (orientation: landscape)
+and (-webkit-min-device-pixel-ratio: 1) {
+    /*.pageHeader.slideDock.topvalue{top:-100px;}*/
+    /* .gallery li a { height: 86px }*/
+    canvas#canvas {
+        width: 980px;
+        height: 600px;
+        left: 2%;
+    }
+    canvas#image {
+        background-color: yellow;
+        width: 980px;
+        height:600px;
+        left: 2%;
+    }
+    canvas#image-preview {
+        background-color: green;
+        width: 980px;
+        height: 600px;
+        left: 2%;
+    }
+    .toolBar li div img {
+        width: 25%;
+    }
+    
+}
+
+
+
+/* ----------- iPad 3 and 4 ----------- */
+
+/* Portrait */
+@media only screen
+and (min-device-width: 768px)
+and (max-device-width: 1024px)
+and (orientation: portrait)
+and (-webkit-min-device-pixel-ratio: 2) {
+    canvas#canvas {
+        width: 700px;
+        height: 900px;
+        left: 2%;
+    }
+    canvas#image {
+        background-color: yellow;
+        width: 700px;
+        height: 900px;
+        left: 2%;
+    }
+    canvas#image-preview {
+        background-color: green;
+        width: 700px;
+        height: 980px;
+        left: 2%;
+    }
+
+.toolBar li div img {
+    width: 35%;
+}
+
+}
+
+/* Landscape */
+@media only screen
+and (min-device-width: 768px)
+and (max-device-width: 1024px)
+and (orientation: landscape)
+and (-webkit-min-device-pixel-ratio: 2) {
+    /* .pageHeader.slideDock.topvalue{top:-100px;}*/
+     /* .gallery li a { height: 86px }*/
+     canvas#canvas {
+         width: 980px;
+         height: 600px;
+         left: 2%;
+     }
+     canvas#image {
+         background-color: yellow;
+         width: 980px;
+         height: 600px;
+         left: 2%;
+     }
+     canvas#image-preview {
+         background-color: green;
+         width: 980px;
+         height: 600px;
+         left: 2%;
+     }
+
+.toolBar li div img {
+    width: 25%;
+}
+
+}
