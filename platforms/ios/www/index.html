@@ -3,16 +3,15 @@
     <head>
         <meta name="format-detection" content="telephone=no">
             <meta name="msapplication-tap-highlight" content="no">
-                <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-                    <!-- <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />-->
+                    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width"/>
                     <title>PicPuzzle</title>
                     <!-- Bootstrap -->
                     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-                        <link rel="stylesheet" type="text/css" href="css/index.css">
-                            <!-- <link rel="stylesheet" type="text/css" href="css/android.css">-->
-                            <link rel="stylesheet" type="text/css" href="css/ios.css">
-                                </head>
-    <body>
+                    <link rel="stylesheet" type="text/css" href="css/index.css">
+               <!-- <link rel="stylesheet" type="text/css" href="css/android.css">-->
+                    <link rel="stylesheet" type="text/css" href="css/ios.css">
+    </head>
+    <body onload="onLoad()">
         <div class="layout">
             <!--<div class="loading"></div>-->
             <div class="homePage animatedlinear fadeInRight" style="display:none;">
@@ -109,8 +108,12 @@
                             Free
                             <div><img src="images/sh2.png"/></div>
                         </li>-->
-                        <li id="3">
+                        <li id="2">
                             Free
+                            <div><img src="images/sh2.png"/></div>
+                        </li>
+                        <li id="3">
+                            Purchased
                             <div><img src="images/sh3.png"/></div>
                         </li>
                         <li id="4">
@@ -119,11 +122,7 @@
                         </li>
                         <li id="5">
                             Purchased
-                            <div><img src="images/sh6.png"/></div>
-                        </li>
-                        <li id="6">
-                            Purchased
-                            <div><img src="images/sh7.png"/></div>
+                            <div><img src="images/sh5.png"/></div>
                         </li>
                         <!--<li id="5">Free<div><img src="images/sh5.png"/></div></li>-->
                         <!--<li id="8">Purchased<div><img src="images/sh8.png"/></div></li>-->
@@ -166,7 +165,8 @@
                     <div class="tableCover">
                         <span class="tableCell">
                             <a href="#" style="color:#fff;">Level :<span class="styled-select">
-                                <select id="set-parts"></select>
+                                <select id="set-parts">
+                                </select>
                             </span></a>
                         </span>
                         <span class="tableCell"><a href="#" style="color:#fff;">Time : <span id="clock">00:00:00</span></a></span>
@@ -245,6 +245,9 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="join_animation" id="star" style="display:none;z-index:3000;">
+            <img src="images/flashypink.gif" style="border:0;"></img>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/jquery.min.js"></script>

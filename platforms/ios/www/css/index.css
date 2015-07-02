@@ -791,3 +791,9 @@ canvas#image-preview.show {
     background:url(../images/loader.gif) no-repeat center;
     float:left;
 }
+.progressBar ,.join_animation{
+    position:  absolute;;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
