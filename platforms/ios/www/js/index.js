@@ -1,7 +1,5 @@
 var db;
 var dbCreated = false;
-//var soundStatus = "off";
-//var autoRotationStatus = "off";
 var shapeStatus = 1;
 var levelStatus = 1;
 var mediaFlag = "true";
@@ -9,18 +7,122 @@ var shapeId="";
 var imageId="";
 var levelId="";
 var my_media = null;
-var play_image;
-var tool_flag= "true";
+var playImage;
 var pictureSource;
 var destinationType;
-var change_image_flag = "false";
 
-document.addEventListener("deviceready", onDeviceReady, false);
-document.addEventListener("resume", onResume, false);
-document.addEventListener("backbutton", onBackKeyDown, false);
-document.addEventListener("pause", onPause, false);
-document.addEventListener("touchstart", function(){}, true);
-/*window.addEventListener('orientationchange', doOnOrientationChange);
+
+function onLoad() {
+    document.addEventListener("deviceready", onDeviceReady, false);
+}
+
+// Cordova is loaded and it is now safe to make calls Cordova methods
+function onDeviceReady() {
+   // Register the event listener
+    document.addEventListener("resume", onResume, false);
+    document.addEventListener("backbutton", onBackKeyDown, false);
+    document.addEventListener("pause", onPause, false);
+    document.addEventListener("touchstart", function(){}, true);
+    //window.addEventListener('orientationchange', doOnOrientationChange);
+    /* navigator.splashscreen.show();
+     if (navigator.splashscreen) {
+     console.warn('Hiding splash screen');
+     // We're done initializing, remove the splash screen
+     setTimeout(function() {
+     navigator.splashscreen.hide();
+     }, 100);
+     }*/
+    var currentsoundStatus = window.localStorage["soundStatus"];
+    if ((currentsoundStatus === undefined) ||(currentsoundStatus == null))
+    {
+        window.localStorage.setItem("soundStatus","on");
+        playAudio("audio/music.mp3");
+    }
+    else if(currentsoundStatus =="off"){
+        window.localStorage.setItem("soundStatus","off");
+        stopAudio();
+    }
+    else if(window.localStorage["soundStatus"] =="on"){
+        window.localStorage.setItem("soundStatus","on");
+        playAudio("audio/music.mp3");
+    }
+    
+    var currentautoRotationStatus = window.localStorage["autoRotationStatus"];
+  
+    if ((currentautoRotationStatus === undefined) ||(currentautoRotationStatus == null))
+    {
+        window.localStorage.setItem("autoRotationStatus","false");
+    }
+    else if(currentautoRotationStatus =="false"){
+        window.localStorage.setItem("autoRotationStatus","false");
+    }
+    else if(currentautoRotationStatus =="true"){
+        window.localStorage.setItem("autoRotationStatus","true");
+    }
+    
+    var changeImageFlagStatus = window.localStorage["Puzzle_ChangeImageFlag"];
+    if ((changeImageFlagStatus === undefined) ||(changeImageFlagStatus == null))
+    {
+        console.log(changeImageFlagStatus)
+    }
+    else if(changeImageFlagStatus== "true" )
+    {
+        // playImage = window.localStorage["Puzzle_PlayImage"];
+        // shapeId = window.localStorage["Puzzle_ShapeId"];
+        //window.localStorage.clear();
+        //$('.settingsPage, .imgSelectPage, .chooseShapePage, .homePage').hide();
+       // $('.gamePage').show();
+       // playPuzzleGame();
+        window.localStorage.setItem("Puzzle_ChangeImageFlag","false");
+    }
+    
+    var settingPageChangeStatus = window.localStorage["Puzzle_SettingPageChange"];
+    if ((settingPageChangeStatus === undefined) ||(settingPageChangeStatus == null))
+    {
+        console.log(settingPageChangeStatus)
+    }
+    else if(window.localStorage["Puzzle_SettingPageChange"] == "true")
+    {
+        // playImage = window.localStorage["Puzzle_PlayImage"];
+        // shapeId = window.localStorage["Puzzle_ShapeId"];
+       // $('.settingsPage, .imgSelectPage, .chooseShapePage, .homePage').hide();
+       // $('.gamePage').show();
+       // playPuzzleGame();
+        window.localStorage.setItem("Puzzle_SettingPageChange","false");
+    }
+    
+    
+    playImage = window.localStorage["Puzzle_PlayImage"];
+    shapeId = window.localStorage["Puzzle_ShapeId"];
+    if ((playImage === undefined) ||(playImage == null)||(shapeId === undefined) ||(shapeId == null))
+    {
+        $('.settingsPage, .imgSelectPage, .chooseShapePage, .gamePage').hide();
+        $('.homePage').show();
+    }
+    else
+    {
+        $('.settingsPage, .imgSelectPage, .chooseShapePage, .homePage').hide();
+        $('.gamePage').show();
+        playPuzzleGame();
+    }
+    
+    pictureSource=navigator.camera.PictureSourceType;
+    destinationType=navigator.camera.DestinationType;
+    
+    //----------------------------------------------------------------------------------------------
+    // Start Database Creation
+    //----------------------------------------------------------------------------------------------
+    db = window.openDatabase("PuzzlePicDirectoryDB", "1.0", "Puzzle Pic Images", 200000);
+    if (dbCreated){
+        db.transaction(getImages, transaction_error);
+    }
+    else{
+        db.transaction(populateDB, transaction_error, populateDB_success);
+    }
+    
+    swipeSliders();
+    
+}
 
 function doOnOrientationChange()
 {
@@ -37,7 +139,7 @@ function doOnOrientationChange()
             location.reload();
             break; 
     }
-}*/
+}
 
 $(window).on("orientationchange",function(){
              
@@ -74,8 +176,13 @@ function onBackKeyDown(e) {
 }
 
 function onPause() {
+    alert("onPause");
     if(window.localStorage["soundStatus"] =="on"){
-        $('#settingsSound img').attr('src','images/soundOff.png');
+        window.localStorage.setItem("soundStatus","on");
+        stopAudio();
+    }
+    else
+    {
         window.localStorage.setItem("soundStatus","off");
         stopAudio();
     }
@@ -83,25 +190,19 @@ function onPause() {
 
 // Handle the resume event
 function onResume() {
-    if(window.localStorage["soundStatus"] =="on"){
-        $('#settingsSound img').attr('src','images/soundOff.png');
+    alert("onResume");
+    if(window.localStorage["soundStatus"] =="off"){
         window.localStorage.setItem("soundStatus","off");
         stopAudio();
     }
     else{
-        $('#settingsSound img').attr('src','images/soundOn.png');
         window.localStorage.setItem("soundStatus","on");
-       // playAudio("audio/music.mp3");
+        playAudio("audio/music.mp3");
     }
 }
 
-//-----------------------------------------------------------------------------------
-// Start page selection
-//-----------------------------------------------------------------------------------
-$(document).ready( function(){
-    window.localStorage.setItem("soundStatus","on");
-    window.localStorage.setItem("autoRotationStatus","off");
-                  
+
+function swipeSliders() {
     /* slider 1 swipe */
     var theSliderElement = document.getElementById("slider");
     theSliderElement.addEventListener("touchmove", handleTouchMoveslider, false);
@@ -122,9 +223,9 @@ $(document).ready( function(){
         var yDiff = yDown - yUp;
         if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {
             if ( xDiff > 0 ) {
-            moveRight_first();
+                moveRight_first();
             } else {
-            moveLeft_first();
+                moveLeft_first();
             }
         }
         xDown = null;
@@ -150,11 +251,11 @@ $(document).ready( function(){
         var xDiff = xDown - xUp;
         var yDiff = yDown - yUp;
         if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {
-        if ( xDiff > 0 ) {
-        moveRight_second();
-        } else {
-        moveLeft_second();
-        }
+            if ( xDiff > 0 ) {
+                moveRight_second();
+            } else {
+                moveLeft_second();
+            }
         }
         xDown = null;
         yDown = null;
@@ -164,60 +265,61 @@ $(document).ready( function(){
     var theSlider3Element = document.getElementById("slider3");
     theSlider3Element.addEventListener("touchmove", handleTouchMoveSlider3, false);
     theSlider3Element.addEventListener('touchstart', handleTouchStartSlider3, false);
-    var xDown = null;                                                        
+    var xDown = null;
     var yDown = null;
-    function handleTouchStartSlider3(evt) {                                         
+    function handleTouchStartSlider3(evt) {
         xDown = evt.touches[0].clientX;
-        yDown = evt.touches[0].clientY;                                      
+        yDown = evt.touches[0].clientY;
     };
     function handleTouchMoveSlider3(evt) {
         if ( ! xDown || ! yDown ) {
             return;
         }
-        var xUp = evt.touches[0].clientX;                                    
+        var xUp = evt.touches[0].clientX;
         var yUp = evt.touches[0].clientY;
         var xDiff = xDown - xUp;
         var yDiff = yDown - yUp;
         if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {
-        if ( xDiff > 0 ) {
-        moveRight_third();
-        } else {
-        moveLeft_third();
-        }                       
+            if ( xDiff > 0 ) {
+                moveRight_third();
+            } else {
+                moveLeft_third();
+            }
         }
         xDown = null;
-        yDown = null;                                             
+        yDown = null;
     };
-                  
-    $('#play a').click( function(e){
-        e.preventDefault();
+}
+
+//-----------------------------------------------------------------------------------
+// Start page selection
+//-----------------------------------------------------------------------------------
+
+
+    $('#play a').on("click touchstart", function(e){
+        e.stopPropagation(); e.preventDefault();
         $('.settingsPage,.chooseShapePage,.homePage,.gamePage,.loginPage,.registerPage').hide();
         $('.imgSelectPage').show();
     });
-                  
-    $('ul[id*=shapes] li').click(function (e) {
-        //e.preventDefault();
-        $(this).children().toggleClass("animatedTada tada");
+
+    $('ul[id*=shapes] li').on("click touchstart", function(e){
+        e.stopPropagation(); e.preventDefault();
         db.transaction(getImagesFromId, transaction_error);
-        window.localStorage.setItem("shapeId",$(this).attr('id'));
+        window.localStorage.setItem("Puzzle_ShapeId",$(this).attr('id'));
         $('.settingsPage,.imgSelectPage,.homePage,.chooseShapePage,.loginPage,.registerPage').hide();
         $('.gamePage').show();
     });
 
-    $('.settings').click( function(e){
-        //e.preventDefault();
-        $(this).toggleClass("animatedTada tada");
-        //setTimeout(function(){ alert("Hello"); }, 3000);
+    $('.settings').on("click touchstart", function(e){
+        e.stopPropagation(); e.preventDefault();
+                       $(this).toggleClass("tada animatedTada");
         $('.gamePage,.imgSelectPage,.homePage,.chooseShapePage,.loginPage,.registerPage').hide();
         settingPageShow();
     });
-                  
-    $('#settingsSound').click( function(e){
-       // e.preventDefault();
-        $(this).toggleClass("animatedTada tada");
-        /* $(this).addClass("animatedTada tada");
-        setTimeout(function(){
-        $(this).removeClass("animatedTada tada")},1000);*/
+
+    $('#settingsSound').on("click touchstart", function(e){
+        e.stopPropagation(); e.preventDefault();
+                            $(this).toggleClass("tada animatedTada");
         if(window.localStorage["soundStatus"] =="on"){
             $('#settingsSound img').attr('src','images/soundOff.png');
             stopAudio();
@@ -225,29 +327,44 @@ $(document).ready( function(){
         }
         else if(window.localStorage["soundStatus"] =="off"){
             $('#settingsSound img').attr('src','images/soundOn.png');
-           // playAudio("audio/music.mp3");
+            playAudio("audio/music.mp3");
             window.localStorage.setItem("soundStatus","on");
         }
     });
 
-    $('#settingsRotation').click( function(e){
-        //e.preventDefault();
-        $(this).toggleClass("animatedTada tada");
-        if(window.localStorage["autoRotationStatus"] =="off"){
-            $('#settingsRotation img').attr('src','images/autoRotateOn.png');
-            window.localStorage.setItem("autoRotationStatus","on");
-        }
-        else if(window.localStorage["autoRotationStatus"] =="on"){
-            $('#settingsRotation img').attr('src','images/autoRotateOff.png');
-            window.localStorage.setItem("autoRotationStatus","off");
-        }
-         window.localStorage.setItem("setting_page_change","true");
+    $('#settingsRotation').on("click touchstart", function(e){
+         e.stopPropagation(); e.preventDefault();
+                              
+                            /*  if ( $(this).hasClass("tada") || $(this).hasClass("animatedTada")) {
+                               $(this).removeClass("tada");
+                               $(this).removeClass("animatedTada");
+                              } else {
+                              $(this).addClass("tada");
+                              $(this).addClass("animatedTada");
+                              }*/
+                              $(this).toggleClass("tada animatedTada");
+                              
+         var currentautoRotationStatus = window.localStorage["autoRotationStatus"];
+        
+         if ((currentautoRotationStatus === undefined) ||(currentautoRotationStatus == null))
+         {
+         window.localStorage.setItem("autoRotationStatus","false");
+         }
+         else if(currentautoRotationStatus =="false"){
+         $('#settingsRotation img').attr('src','images/autoRotateOn.png');
+         window.localStorage.setItem("autoRotationStatus","true");
+         }
+         else if(currentautoRotationStatus =="true"){
+         $('#settingsRotation img').attr('src','images/autoRotateOff.png');
+         window.localStorage.setItem("autoRotationStatus","false");
+         }
+         window.localStorage.setItem("Puzzle_SettingPageChange","true");
     });
 
-    $('#settingsShape').click( function(e){
-        //e.preventDefault();
-        $(this).toggleClass("animatedTada tada");
-        if(shapeStatus == 6)
+    $('#settingsShape').on("click touchstart", function(e){
+        e.stopPropagation(); e.preventDefault();
+                            $(this).toggleClass("tada animatedTada");
+        if(shapeStatus == 5)
         shapeStatus =1;
         else
         shapeStatus++;
@@ -259,29 +376,29 @@ $(document).ready( function(){
         /*case 2 :$('#settingsShape img').attr('src','images/shape2.png');;
             shapeId = shapeStatus;
             break;*/
+        case 2 :$('#settingsShape img').attr('src','images/shape2.png');
+            shapeId = shapeStatus;
+            break;
         case 3 :$('#settingsShape img').attr('src','images/shape3.png');
             shapeId = shapeStatus;
             break;
-        case 4 :$('#settingsShape img').attr('src','images/shape4.png');
+        case 4 :$('#settingsShape img').attr('src','images/shape4.png');;
             shapeId = shapeStatus;
             break;
-        case 5 :$('#settingsShape img').attr('src','images/shape5.png');;
+        case 5 :$('#settingsShape img').attr('src','images/shape5.png');
             shapeId = shapeStatus;
             break;
-        case 6 :$('#settingsShape img').attr('src','images/shape6.png');
-            shapeId = shapeStatus;
-            break;
-        default:$('#settingsShape img').attr('src','images/shape4.png');
+        default:$('#settingsShape img').attr('src','images/shape1.png');
             shapeId = 1;
         };
-        window.localStorage.setItem("shapeId",shapeId);
-        window.localStorage.setItem("setting_page_change","true");
+        window.localStorage.setItem("Puzzle_ShapeId",shapeId);
+        window.localStorage.setItem("Puzzle_SettingPageChange","true");
        // alert("shapeStatus : "+shapeStatus+"shapeId : "+shapeId);
     });
 
-    $('#settingsLevel').click( function(e){
-        //e.preventDefault();
-        $(this).toggleClass("animatedTada tada");
+    $('#settingsLevel').on("click touchstart", function(e){
+        e.stopPropagation(); e.preventDefault();
+                            $(this).toggleClass("tada animatedTada");
         if(levelStatus == 3)
             levelStatus =1;
         else
@@ -300,50 +417,58 @@ $(document).ready( function(){
         default:$('#settingsLevel img').attr('src','images/easy.png');
                 levelId = 1;
         };
-        window.localStorage.setItem("levelId",levelId);
-        window.localStorage.setItem("setting_page_change","true");
+        window.localStorage.setItem("Puzzle_LevelId",levelId);
+        window.localStorage.setItem("Puzzle_SettingPageChange","true");
     });
 
-    $('.proVersion').click( function(e){
-        //e.preventDefault();
-        $(this).toggleClass("animatedTada tada");
+    $('.proVersion').on("click touchstart", function(e){
+        e.stopPropagation(); e.preventDefault();
+                         $(this).toggleClass("tada animatedTada");
         $('.proVersionPopUp').show();
         $('.popUpCov').show();
     });
           
-    $('#playWithCode').click( function(){
+    $('#playWithCode').on("click touchstart", function(e){
+       e.stopPropagation(); e.preventDefault();
+                           $(this).toggleClass("tada animatedTada");
        alert("#playWithCode")
     });
 
-    $('.goPlayPage').click( function(){
+    /*$('.goPlayPage').on("click touchstart", function(e){
+       e.stopPropagation(); e.preventDefault();
        $('.gamePage,.homePage,.chooseShapePage,.loginPage,.registerPage,.settingsPage').hide();
        $('.imgSelectPage').show();
     });
                   
-    $('.goRegisterPage').click( function(){
+    $('.goRegisterPage').on("click touchstart", function(e){
+       e.stopPropagation(); e.preventDefault();
        $('.gamePage,.homePage,.chooseShapePage,.loginPage,.imgSelectPage,.settingsPage').hide();
        $('.registerPage').show();
     });
 
-    $('.chooseShape').click( function(){
+    $('.chooseShape').on("click touchstart", function(e){
+        e.stopPropagation(); e.preventDefault();
         $('.gamePage,.homePage,.registerPage,.loginPage,.imgSelectPage,.settingsPage').hide();
         $('.chooseShapePage').show();
     });
 
-    $('.goSettingsPage').click( function(){
+    $('.goSettingsPage').on("click touchstart", function(e){
+         e.stopPropagation(); e.preventDefault();
         $('.gamePage,.homePage,.registerPage,.loginPage,.imgSelectPage').hide();
         settingPageShow();
-    });
+    });*/
 
-    $('.playGame').click( function(){
-        var currentIds = window.localStorage["play_image"];
+    $('.playGame').on("click touchstart", function(e){
+        e.stopPropagation(); e.preventDefault();
+                       $(this).toggleClass("tada animatedTada");
+        var currentIds = window.localStorage["Puzzle_PlayImage"];
         if ((currentIds === undefined) ||(currentIds == null))
         {
             $('.loginPage, .registerPage, .settingsPage,.gamePage,.homePage,.chooseShapePage').hide();
             $('.imgSelectPage').show()
         }
         else{
-            if(window.localStorage["setting_page_change"] == "true")
+            if(window.localStorage["Puzzle_SettingPageChange"] == "true")
             {
                 location.reload();
             }
@@ -355,73 +480,91 @@ $(document).ready( function(){
         }
     });
                   
-    $('.killMe').click( function(){
+    $('.killMe').on("click touchstart", function(e){
+        e.stopPropagation(); e.preventDefault();
         $('.popUpCov').hide();
     });
 
-    $('.navImageBackButton').click( function(){
-        $(this).toggleClass("animatedTada tada");
+    $('.navImageBackButton').on("click touchstart", function(e){
+        e.stopPropagation(); e.preventDefault();
         $('.loginPage, .registerPage, .settingsPage,.gamePage,.imgSelectPage,.chooseShapePage').hide();
         $('.homePage').show();
     });
 
-    $('.navShapeBackButton').click( function(){
-        $(this).toggleClass("animatedTada tada");
+    $('.navShapeBackButton').on("click touchstart", function(e){
+        e.stopPropagation(); e.preventDefault();
         $('.loginPage, .registerPage, .settingsPage,.gamePage,.homePage,.chooseShapePage').hide();
         $('.imgSelectPage').show();
     });
 
-    $('.navSettingsBackButton').click( function(){
-        $(this).toggleClass("animatedTada tada");
+    $('.navSettingsBackButton').on("click touchstart", function(e){
+        e.stopPropagation(); e.preventDefault();
         $('.loginPage, .registerPage, .settingsPage,.gamePage,.imgSelectPage,.chooseShapePage').hide();
         $('.homePage').show();
     });
 
-    $('.navPlayBackButton').click( function(e){
-        $(this).toggleClass("animatedTada tada");
+    $('.navPlayBackButton').on("click touchstart", function(e){
+        e.stopPropagation(); e.preventDefault();
         $('.loginPage, .registerPage, .settingsPage,.gamePage,.imgSelectPage,.homePage').hide();
         $('.chooseShapePage').show();
     });
                   
     $('#change_image').click(function(e){
-       // e.preventDefault();
-        $(this).toggleClass("animatedTada tada");
-        window.localStorage.setItem("change_image_flag","true");
+        e.stopPropagation(); e.preventDefault();
+                              $(this).toggleClass("tada animatedTada");
+        window.localStorage.setItem("Puzzle_ChangeImageFlag","true");
         $('.loginPage, .registerPage, .settingsPage,.gamePage,.chooseShapePage,.homePage').hide();
         $('.imgSelectPage').show();
     });
       
-    $('#change_settings').click( function(e){
-        //e.preventDefault();
-        $(this).toggleClass("animatedTada tada");
+    $('#change_settings').on("click touchstart", function(e){
+        e.stopPropagation(); e.preventDefault();
+                              $(this).toggleClass("tada animatedTada");
         $('.loginPage, .registerPage, .imgSelectPage,.gamePage,.chooseShapePage,.homePage').hide();
         settingPageShow();
         window.localStorage.setItem("game_to_setting_page","true");
     });
     
    $('#show_preview').click(function(e){
-        //e.preventDefault();
-        $(this).toggleClass("animatedTada tada");
+        e.stopPropagation(); e.preventDefault();
+                             $(this).toggleClass("tada animatedTada");
         $('#image-preview').toggleClass("show");
         //canvas.style.marginLeft = -(canvas.width / 2) + "px"
         //canvas.style.marginTop = (canvas.width / 4) + "px"
    });
                   
    $('#auto_solve').click(function(e){
-        e.preventDefault();
-        $(this).toggleClass("animatedTada tada");
-    });
+        e.stopPropagation(); e.preventDefault();
+                         $(this).toggleClass("tada animatedTada");
+                         var playImageVal= window.localStorage["Puzzle_PlayImage"];
+                         var shapeIdValue = window.localStorage["Puzzle_ShapeId"];
+       
+                          (function() {
+                           var jsaw = new jigsaw.Jigsaw({
+                                                        defaultImage: "puzzlepictures/" + playImageVal,
+                                                        defaultPieces: 12,
+                                                        insideValue:"inside_"+ shapeIdValue,
+                                                        outsideValue:"outside_"+ shapeIdValue,
+                                                        rotatePieces:false,
+                                                        shuffled: false,
+                                                        });
+                           }());
+   });
                   
-    $('#popupPlay').click( function(e){
-        window.localStorage.setItem("change_image_flag","true");
+    $('#popupPlay').on("click touchstart", function(e){
+        e.stopPropagation(); e.preventDefault();
+                       $(this).toggleClass("tada animatedTada");
+        window.localStorage.setItem("Puzzle_ChangeImageFlag","true");
         $('.popUpCov').hide();
         $('.loginPage, .registerPage,.gamePage,.chooseShapePage,.homePage,.settingsPage').hide();
         $('.imgSelectPage').show();
     });
                   
-    $('#popupPro').click( function(){
+    $('#popupPro').on("click touchstart", function(e){
+        e.stopPropagation(); e.preventDefault();
+                      $(this).toggleClass("tada animatedTada");
         alert("Currently Redirecting to Home Screen Update on Second Phase");
-        window.localStorage.setItem("change_image_flag","true");
+        window.localStorage.setItem("Puzzle_ChangeImageFlag","true");
         $('.popUpCov').hide();
         $('.loginPage, .registerPage,.gamePage,.chooseShapePage,.settingsPage,.imgSelectPage').hide();
         $('.homePage').show();
@@ -517,79 +660,11 @@ $(document).ready( function(){
     $('a.control_next_third').click(function () {
         moveRight_third();
     });
-})
+
 
 //-----------------------------------------------------------------------------------
 // End slider
 //-----------------------------------------------------------------------------------
-function onDeviceReady() {
-   /* navigator.splashscreen.show();
-    if (navigator.splashscreen) {
-        console.warn('Hiding splash screen');
-        // We're done initializing, remove the splash screen
-        setTimeout(function() {
-                   navigator.splashscreen.hide();
-        }, 100);
-    }*/
-    
-    if(window.localStorage["change_image_flag"] == "true" )
-    {
-        play_image = window.localStorage["play_image"];
-        shapeId = window.localStorage["shapeId"];
-        //window.localStorage.clear();
-        window.localStorage.setItem("change_image_flag","false");
-        $('.settingsPage, .imgSelectPage, .chooseShapePage, .homePage').hide();
-        $('.gamePage').show();
-        playPuzzleGame();
-    }
-    else if(window.localStorage["setting_page_change"] == "true")
-    {
-        window.localStorage.setItem("setting_page_change","false");
-        play_image = window.localStorage["play_image"];
-        shapeId = window.localStorage["shapeId"];
-        $('.gamePage').show();
-        playPuzzleGame();
-    }
-    else
-    {
-        play_image = window.localStorage["play_image"];
-        shapeId = window.localStorage["shapeId"];
-   	    if ((play_image === undefined) ||(play_image == null)||(shapeId === undefined) ||(shapeId == null))
-        {
-            $('.settingsPage, .imgSelectPage, .chooseShapePage, .gamePage').hide();
-            $('.homePage').show();
-        }
-        else
-        {
-            $('.settingsPage, .imgSelectPage, .chooseShapePage, .homePage').hide();
-            $('.gamePage').show();
-            playPuzzleGame();
-        }
-    }
-
-    pictureSource=navigator.camera.PictureSourceType;
-    destinationType=navigator.camera.DestinationType;
-    
-    if(window.localStorage["soundStatus"] =="off"){
-        //window.localStorage.setItem("soundStatus","off");
-        stopAudio();
-    }
-    else if(window.localStorage["soundStatus"] =="on"){
-        //window.localStorage.setItem("soundStatus","on");
-        //playAudio("audio/music.mp3");
-        // playAudio("http://audio.ibeat.org/content/p1rj1s/p1rj1s_-_rockGuitar.mp3");
-    }
-//----------------------------------------------------------------------------------------------
-// Start Database Creation
-//----------------------------------------------------------------------------------------------
-    db = window.openDatabase("PuzzlePicDirectoryDB", "1.0", "Puzzle Pic Images", 200000);
-    if (dbCreated){
-        db.transaction(getImages, transaction_error);
-    }
-    else{
-        db.transaction(populateDB, transaction_error, populateDB_success);
-    }
-}
 
 function populateDB(tx) {
     $('#busy').show();
@@ -629,14 +704,14 @@ function getImages_play(tx, results) {
     var len = results.rows.length;
     for (var i=0; i<len; i++) {
         var imageListItems = results.rows.item(i);
-        window.localStorage.setItem("play_image", imageListItems.picture);
-        //window.localStorage.setItem("shapeId",shapeId);
-        if(window.localStorage["change_image_flag"] == "true"  || window.localStorage["game_to_setting_page"] == "true")
+        window.localStorage.setItem("Puzzle_PlayImage", imageListItems.picture);
+        //window.localStorage.setItem("Puzzle_ShapeId",shapeId);
+        if(window.localStorage["Puzzle_ChangeImageFlag"] == "true"  || window.localStorage["game_to_setting_page"] == "true")
         {
-            window.localStorage.setItem("game_to_setting_page", "false");
             location.reload();
+            window.localStorage.setItem("game_to_setting_page", "false");
         }
-        play_image = imageListItems.picture;
+        playImage = imageListItems.picture;
     }
     playPuzzleGame();
 }
@@ -664,22 +739,6 @@ function ImageClick(id)
 // End Database Creation
 // Satrt Background Music
 //-----------------------------------------------------------------------------------------------------------
-/*$('.sound').click( function(){
-                  alert("window.localStorage : "+window.localStorage["soundStatus"]);
-    if(window.localStorage["soundStatus"] =="on"){
-        //document.getElementById("imgSound").src="images/soundOn.png";
-        $('#settingsSound img').attr('src','images/soundOn.png');
-        window.localStorage.setItem("soundStatus","off");
-        stopAudio();
-    }	
-    else{
-        //document.getElementById("imgSound").src="images/soundOff.png";
-        $('#settingsSound img').attr('src','images/soundOff.png');
-        window.localStorage.setItem("soundStatus","on");
-        playAudio("audio/music.mp3");
-        //playAudio("http://audio.ibeat.org/content/p1rj1s/p1rj1s_-_rockGuitar.mp3");
-    }
-});*/
 
 function playAudio(src) {
     mediaFlag = "true";
@@ -703,13 +762,13 @@ function stopAudio() {
 function onSuccess() {
     console.log("playAudio():Audio Success");
     if(mediaFlag == "true"){
-      // playAudio("audio/music.mp3");
+       playAudio("audio/music.mp3");
        //playAudio("http://audio.ibeat.org/content/p1rj1s/p1rj1s_-_rockGuitar.mp3");
     }
 }
 
 function onError(error) {
-    // alert('code: '    + error.code    + '\n' +'message: ' + error.message + '\n');
+     console.log('code: '    + error.code    + '\n' +'message: ' + error.message + '\n');
 }
 
 //---------------------------------------------------------------------------------------------------------
@@ -770,7 +829,7 @@ function onFail(message) {
 //--------------------------------------------------------------------------------------------------------
 function playPuzzleGame()
 {
-    var shapeIdVal=window.localStorage["shapeId"];
+    var shapeIdVal=window.localStorage["Puzzle_ShapeId"];
     /*if ((shapeIdVal === undefined) ||(shapeIdVal == null))
     {
         shapeIdVal= 1;
@@ -779,65 +838,74 @@ function playPuzzleGame()
         shapeIdVal=window.localStorage["shapeId"];
     }*/
     
+   /* var layoutHeight = $('#windowlayout').height();  // main layout
+    var toolBarHeight = $('#game-options').height(); // tool bar layout
     
+    var gameHeight = (((layoutHeight - toolBarHeight)/layoutHeight)*100)-8;
+    $("canvas").css("height", gameHeight+"%");
+    $("canvas").css("width", "100%");*/
     
-    //alert(window.localStorage["autoRotationStatus"]);
+    autoRotationStatusVal=window.localStorage["autoRotationStatus"];
     switch (shapeIdVal) {
         case "1":
-            (function() {
-             var jsaw = new jigsaw.Jigsaw({
-                                          defaultImage: "puzzlepictures/" + play_image,
-                                          piecesNumberTmpl: "%d",
-                                          insideValue:"inside_square",
-                                          outsideValue:"outside_square",
-                                          rotatePieces: false
-                                          });
-             }());
-            
-             break;
-        case "2":
-            if (window.localStorage["autoRotationStatus"]=="on") {
+            if (autoRotationStatusVal =="true") {
                 (function() {
                  var jsaw = new jigsaw.Jigsaw({
-                                              defaultImage: "puzzlepictures/" + play_image,
-                                              piecesNumberTmpl: "%d",
-                                              insideValue:"inside",
-                                              outsideValue:"outside",
-                                              rotatePieces: true
+                                              defaultImage: "puzzlepictures/" + playImage,
+                                              defaultPieces: 12,
+                                              insideValue:"inside_"+ shapeIdVal,
+                                              outsideValue:"outside_"+ shapeIdVal,
+                                              rotatePieces:true
                                               });
                  }());
             }
-            else{
+            else if (autoRotationStatusVal =="false"){
                 (function() {
                  var jsaw = new jigsaw.Jigsaw({
-                                              defaultImage: "puzzlepictures/" + play_image,
-                                              piecesNumberTmpl: "%d",
-                                              insideValue:"inside",
-                                              outsideValue:"outside",
+                                              defaultImage: "puzzlepictures/" + playImage,
+                                              defaultPieces: 12,
+                                              insideValue:"inside_"+ shapeIdVal,
+                                              outsideValue:"outside_"+ shapeIdVal,
                                               rotatePieces: false
                                               });
                  }());
             }
             break;
+
+            
+            
+        case "2":
+            (function() {
+             var jsaw = new jigsaw.Jigsaw({
+                                          defaultImage: "puzzlepictures/" + playImage,
+                                          defaultPieces: 12,
+                                          insideValue:"inside_"+ shapeIdVal,
+                                          outsideValue:"outside_"+ shapeIdVal,
+                                          rotatePieces:false
+                                          });
+             }());
+            
+            break;
+            
         case "3":
-           if (window.localStorage["autoRotationStatus"]=="on") {
+             if (autoRotationStatusVal =="true"){
                 (function() {
                  var jsaw = new jigsaw.Jigsaw({
-                                              defaultImage: "puzzlepictures/" + play_image,
-                                              piecesNumberTmpl: "%d",
-                                              insideValue:"inside",
-                                              outsideValue:"outside",
-                                              rotatePieces: true
+                                              defaultImage: "puzzlepictures/" + playImage,
+                                              defaultPieces: 12,
+                                              insideValue:"inside_"+ shapeIdVal,
+                                              outsideValue:"outside_"+ shapeIdVal,
+                                              rotatePieces:true
                                               });
                  }());
             }
-            else{
+            else if (autoRotationStatusVal =="false"){
                 (function() {
                  var jsaw = new jigsaw.Jigsaw({
-                                              defaultImage: "puzzlepictures/" + play_image,
-                                              piecesNumberTmpl: "%d",
-                                              insideValue:"inside",
-                                              outsideValue:"outside",
+                                              defaultImage: "puzzlepictures/" + playImage,
+                                             defaultPieces: 12,
+                                              insideValue:"inside_"+ shapeIdVal,
+                                              outsideValue:"outside_"+ shapeIdVal,
                                               rotatePieces: false
                                               });
                  }());
@@ -845,24 +913,24 @@ function playPuzzleGame()
             break;
 
         case "4":
-             if (window.localStorage["autoRotationStatus"]=="on") {
+            if (autoRotationStatusVal =="true") {
                 (function() {
                  var jsaw = new jigsaw.Jigsaw({
-                                              defaultImage: "puzzlepictures/" + play_image,
-                                              piecesNumberTmpl: "%d",
-                                              insideValue:"inside_jigSquare",
-                                              outsideValue:"outside_jigSquare",
-                                              rotatePieces: true
+                                              defaultImage: "puzzlepictures/" + playImage,
+                                              defaultPieces: 12,
+                                              insideValue:"inside_"+ shapeIdVal,
+                                              outsideValue:"outside_"+ shapeIdVal,
+                                              rotatePieces:true
                                               });
                  }());
             }
-            else{
+            else if (autoRotationStatusVal =="false"){
                 (function() {
                  var jsaw = new jigsaw.Jigsaw({
-                                              defaultImage: "puzzlepictures/" + play_image,
-                                             piecesNumberTmpl: "%d",
-                                              insideValue:"inside_jigSquare",
-                                              outsideValue:"outside_jigSquare",
+                                              defaultImage: "puzzlepictures/" + playImage,
+                                              defaultPieces: 12,
+                                              insideValue:"inside_"+ shapeIdVal,
+                                              outsideValue:"outside_"+ shapeIdVal,
                                               rotatePieces: false
                                               });
                  }());
@@ -870,49 +938,24 @@ function playPuzzleGame()
             break;
 
         case "5":
-            if (window.localStorage["autoRotationStatus"]=="on") {
+            if (autoRotationStatusVal =="true") {
                 (function() {
                  var jsaw = new jigsaw.Jigsaw({
-                                              defaultImage: "puzzlepictures/" + play_image,
-                                              piecesNumberTmpl: "%d",
-                                              insideValue:"inside_curve",
-                                              outsideValue:"outside_curve",
-                                              rotatePieces: true
+                                              defaultImage: "puzzlepictures/" + playImage,
+                                              defaultPieces: 12,
+                                              insideValue:"inside_"+ shapeIdVal,
+                                              outsideValue:"outside_"+ shapeIdVal,
+                                              rotatePieces:true
                                               });
                  }());
             }
-            else{
+            else if (autoRotationStatusVal =="false"){
                 (function() {
                  var jsaw = new jigsaw.Jigsaw({
-                                              defaultImage: "puzzlepictures/" + play_image,
-                                              piecesNumberTmpl: "%d",
-                                              insideValue:"inside_curve",
-                                              outsideValue:"outside_curve",
-                                              rotatePieces: false
-                                              });
-                 }());
-            }
-            break;
-
-        case "6":
-            if (window.localStorage["autoRotationStatus"]=="on") {
-                (function() {
-                 var jsaw = new jigsaw.Jigsaw({
-                                              defaultImage: "puzzlepictures/" + play_image,
-                                              piecesNumberTmpl: "%d",
-                                              insideValue:"inside_jigDiamond",
-                                              outsideValue:"outside_jigDiamond",
-                                              rotatePieces: true
-                                              });
-                 }());
-            }
-            else{
-                (function() {
-                 var jsaw = new jigsaw.Jigsaw({
-                                              defaultImage: "puzzlepictures/" + play_image,
-                                              piecesNumberTmpl: "%d",
-                                              insideValue:"inside_jigDiamond",
-                                              outsideValue:"outside_jigDiamond",
+                                              defaultImage: "puzzlepictures/" + playImage,
+                                              defaultPieces: 12,
+                                              insideValue:"inside_"+ shapeIdVal,
+                                              outsideValue:"outside_"+ shapeIdVal,
                                               rotatePieces: false
                                               });
                  }());
@@ -924,24 +967,22 @@ function playPuzzleGame()
 
 function settingPageShow()
 {
-    switch(window.localStorage["shapeId"] )
+    switch(window.localStorage["Puzzle_ShapeId"] )
     {
         case "1" :$('#settingsShape img').attr('src','images/shape1.png');
             break;
-        /*case "2" :$('#settingsShape img').attr('src','images/shape2.png');
-            break;*/
+        case "2" :$('#settingsShape img').attr('src','images/shape2.png');
+            break;
         case "3" :$('#settingsShape img').attr('src','images/shape3.png');
             break;
         case "4" :$('#settingsShape img').attr('src','images/shape4.png');
             break;
         case "5" :$('#settingsShape img').attr('src','images/shape5.png');
             break;
-        case "6" :$('#settingsShape img').attr('src','images/shape6.png');
-            break;
-        default : $('#settingsShape img').attr('src','images/shape4.png');
+        default : $('#settingsShape img').attr('src','images/shape1.png');
     };
     
-    switch(window.localStorage["levelId"])
+    switch(window.localStorage["Puzzle_LevelId"])
     {
         case "1" :$('#settingsLevel img').attr('src','images/easy.png');
             break;
@@ -952,17 +993,17 @@ function settingPageShow()
         default : $('#settingsLevel img').attr('src','images/easy.png');
     };
     
-    if( window.localStorage["autoRotationStatus"] =="off"){
+    if( window.localStorage["autoRotationStatus"] =="false"){
         $('#settingsRotation img').attr('src','images/autoRotateOff.png');
     }
-    else{
+    else if (window.localStorage["autoRotationStatus"] =="true"){
         $('#settingsRotation img').attr('src','images/autoRotateOn.png');
     }
     
     if(window.localStorage["soundStatus"] =="on"){
         $('#settingsSound img').attr('src','images/soundOn.png');
     }
-    else{
+    else if(window.localStorage["soundStatus"] =="off"){
         $('#settingsSound img').attr('src','images/soundOff.png');
     }
     
