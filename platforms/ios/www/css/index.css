@@ -24,7 +24,7 @@ a:focus,a:hover {
     text-decoration:none;
 }
 
-.tableCover,.homePage,.loginPage,.imgSelectPage,.registerPage,.chooseShapePage,.gamePage,.settingsPage {
+.tableCover,.homePage,.loginPage,.imgSelectPage,.registerPage,.chooseShapePage,.gamePage,.settingsPage,.sendPuzzlePage {
     display:table;
     width:100%;
     height:100%;
@@ -109,7 +109,17 @@ a:focus,a:hover {
     background-image:url(../images/settings.png);
 }
 
-.loginPage {
+
+.homePageButton.settings:hover,.homePageButton.proVersion:hover {
+    -webkit-filter: drop-shadow(5px 5px 5px background: rgba(000,000,000,.6));
+    filter: drop-shadow(5px 5px 5px background: rgba(000,000,000,.6));
+ 
+}
+
+.homePageButton.settings:active,.homePageButton.proVersion:active {
+    -webkit-filter: drop-shadow(5px 5px 5px rgba(238,191,109,.6));
+    filter: drop-shadow(5px 5px 5px rgba(238,191,109,.6));
+    
 }
 
 .loginPage > div.middle {
@@ -142,6 +152,10 @@ ul.button li a,.buttonDefault {
     line-height:46px;
 }
 
+ul.button li a:hover,.buttonDefault:hover{
+    color:rgba(238,191,109,.6);
+    background:#583519;
+}
 .buttonDefault {
     padding:6px 0 0;
     display:inline-block;
@@ -154,7 +168,7 @@ ul.button li a,.buttonDefault {
     position:fixed;
     left:0;
     right:0;
-    top:0;
+    top:16px;
     min-height:45px;
     /*background: rgba(000, 000, 000, .6);
      box-shadow: 0 1px 5px 0px #000;*/
@@ -167,19 +181,28 @@ ul.button li a,.buttonDefault {
 }
 
 .pageHeader a.links {
-    font-size:2.2em;
+    color:#623e1f;
+    background:rgba(238,191,109,.6);
     text-shadow:0 1px 1px #000;
-    line-height:65px!important;
-    color:#b7825a;
-    font-size:1em;
+    /*color:#b7825a;*/
+    font-size:1.2em;
     vertical-align:middle;
     text-shadow:0 1px 1px #000;
     bottom:-13px;
     position:relative;
     border-radius:50%;
-    background:rgba(000,000,000,.6);
+    /*background:rgba(000,000,000,.6);*/
     box-shadow:0 1px 5px 0 #000;
-    padding:.8em 1.2em;
+    padding:.8em .8em;
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
+
+.pageHeader a.links:hover {
+color:rgba(238,191,109,.6);
+background:#623e1f;
 }
 
 .whiteTitle,.goldTitle {
@@ -314,14 +337,17 @@ a.control_prev_first,a.control_prev_second,a.control_prev_third,a.control_next_f
     line-height:47px;
     box-shadow:0 2px 1px 0 #000;
     text-shadow:0 -1px 0 #000;
-    background:linear-gradient(0,#5f3211,#bd8f4f);
-    background:0;
-    background:0;
+   /* background:rgba(238,191,109,.6);*/
+     background: linear-gradient(0, #5f3211, #bd8f4f);
+     background: -webkit-linear-gradient(0, #5f3211, #bd8f4f);
+     background: -moz-linear-gradient(50% 100%, #5f3211, #bd8f4f);
 }
 
 a.control_prev_first:hover,a.control_prev_second:hover,a.control_prev_third:hover,a.control_next_first:hover,a.control_next_second:hover,a.control_next_third:hover {
     opacity:1;
     -webkit-transition:all .2s ease;
+     color:rgba(238,191,109,.6);
+     background:#623e1f;
 }
 
 a.control_prev_first,a.control_prev_second,a.control_prev_third {
@@ -332,7 +358,7 @@ a.control_next_first,a.control_next_second,a.control_next_third {
     right:0;
 }
 
-.inputBoxes input[type="text"] {
+.inputBoxes input[type="text"],.inputBoxes input[type="password"],.inputBoxes input[type="number"]  {
     border:2px #4a280f solid;
     text-align:center;
     height:45px;
@@ -366,9 +392,24 @@ ul.shapes,.settingsButtons {
     font-size:.9em;
 }
 
-.shapes img,.settingsButtons li img {
-    max-width:70%;
+.shapes img {
+    max-width: 70%;
 }
+.settingsButtons li img {
+    max-width: 50%;
+}
+
+.settingsButtons li img:hover{
+    -webkit-filter: drop-shadow(5px 5px 5px background: rgba(000,000,000,.6));
+    filter: drop-shadow(5px 5px 5px background: rgba(000,000,000,.6));
+}
+
+.shapes img:hover {
+    -webkit-filter: drop-shadow(5px 5px 5px rgba(238,191,109,.6));
+    filter: drop-shadow(5px 5px 5px rgba(238,191,109,.6));
+   
+}
+
 
 .settingsButtons li {
     display:inline-block;
@@ -419,7 +460,8 @@ ul.shapes,.settingsButtons {
     right:0;
     bottom:0;
     top:0;
-    background:rgba(238,191,109,.5);
+      /*background: rgba(189, 185, 177, 0.5);*/
+      background: rgba(000, 000, 000, .6);
     display:table-cell;
     text-align:center;
     vertical-align:middle;
@@ -453,7 +495,7 @@ ul.shapes,.settingsButtons {
     border-radius:50%;
     right:-20px;
     font-family:monospace;
-    font-weight:700;
+    font-weight:bold;
     font-size:1.5em;
     box-shadow:0 1px 3px -1px #000;
     cursor:pointer;
@@ -547,6 +589,19 @@ ul.toolBar {
     margin:0 auto 10px;
 }
 
+
+.toolBar li div img:hover{
+    -webkit-filter: drop-shadow(5px 5px 5px background: rgba(000,000,000,.6));
+    filter: drop-shadow(5px 5px 5px background: rgba(000,000,000,.6));
+}
+
+.toolBar li div img:active {
+    -webkit-filter: drop-shadow(5px 5px 5px rgba(238,191,109,.6));
+    filter: drop-shadow(5px 5px 5px rgba(238,191,109,.6));
+    
+}
+
+
 .infoMsg {
     position:absolute;
     top:20px;
@@ -581,7 +636,7 @@ div#canvas-wrap {
     height:100%;
 }
 
-canvas#canvas,canvas#buffer,canvas#image-preview {
+canvas#canvas,canvas#image,canvas#image-preview {
     position:absolute;
     top:45px;
     left:0;
@@ -589,13 +644,14 @@ canvas#canvas,canvas#buffer,canvas#image-preview {
 
 canvas#canvas {
     z-index:100;
+    overflow: hidden;
 }
 
 canvas#canvas.loading {
     background:url(../images/loader.gif) no-repeat center;
 }
 
-canvas#buffer {
+canvas#image {
     z-index:70;
 }
 
@@ -786,14 +842,21 @@ canvas#image-preview.show {
 {
     width:150px;
     height:150px;
-    margin:10px;
-    border:1px solid #000000;
     background:url(../images/loader.gif) no-repeat center;
-    float:left;
 }
 .progressBar ,.join_animation{
     position:  absolute;;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+
+.progressBar{
+    top: 50%;
+    left : 50%;
+}
+
+#play{
+    max-width: 100%;
+}
+
 

@@ -24,6 +24,33 @@ and (orientation: portrait) {
     .proVersion{
         padding-top: 50px;
     }
+    
+    ul.button li a,.buttonDefault {
+        font-size:1em;
+        padding:6px 6px 0;
+    }
+    .popUpBox h2 {
+        font-size:20px;
+    }
+    
+    .popUpBox>div> div {
+        font-size:1em;
+    }
+    canvas#canvas.loading {
+        left: 25%;
+        top: 30%;
+    }
+    .homePage .play img {
+        width: 40%;
+    }
+    .playArea {
+        width: 40%;
+        zoom:.5;
+        -webkit-transform: scale(.5);  /* iPhone Safari browser specific */
+        -o-transform: scale(.5);
+        -moz-transform: scale(.5);
+    }
+
 }
 
 /* Landscape */
@@ -42,6 +69,16 @@ and (orientation: landscape) {
         width: 16%;
     }
     
+    .homePage .play img {
+        width: 40%;
+    }
+    .playArea {
+        width: 40%;
+        zoom:.5;
+        -webkit-transform: scale(.5);  /* iPhone Safari browser specific */
+        -o-transform: scale(.5);
+        -moz-transform: scale(.5);
+    }
 }
 
 /* ----------- iPhone 5 and 5S ----------- */
@@ -74,6 +111,33 @@ and (orientation: portrait) {
         bottom:auto;
         top:-5px;
     }
+    
+    ul.button li a,.buttonDefault {
+        font-size:1em;
+        padding:6px 6px 0;
+    }
+    .popUpBox h2 {
+        font-size:20px;
+    }
+    
+    .popUpBox>div> div {
+        font-size:1em;
+    }
+    canvas#canvas.loading {
+        left: 25%;
+        top: 30%;
+    }
+    .homePage .play img {
+        width: 40%;
+    }
+    .playArea {
+        width: 40%;
+        zoom:.5;
+        -webkit-transform: scale(.5);  /* iPhone Safari browser specific */
+        -o-transform: scale(.5);
+        -moz-transform: scale(.5);
+    }
+
 }
 
 /* Landscape */
@@ -91,6 +155,17 @@ and (orientation: landscape) {
     .settingsButtons li {
         width: 16%;
     }
+    .homePage .play img {
+        width: 40%;
+    }
+    .playArea {
+        width: 40%;
+        zoom:.5;
+        -webkit-transform: scale(.5);  /* iPhone Safari browser specific */
+        -o-transform: scale(.5);
+        -moz-transform: scale(.5);
+    }
+
     
 }
 
@@ -102,7 +177,33 @@ and (min-device-width: 375px)
 and (max-device-width: 667px)
 and (-webkit-min-device-pixel-ratio: 2)
 and (orientation: portrait) {
+    ul.button li a,.buttonDefault {
+        font-size:1em;
+        padding:6px 6px 0;
+    }
+    .popUpBox h2 {
+        font-size:20px;
+    }
     
+    .popUpBox>div> div {
+        font-size:1em;
+    }
+    canvas#canvas.loading {
+        left: 25%;
+        top: 30%;
+    }
+    .homePage .play img {
+        width: 40%;
+    }
+    .playArea {
+        width: 40%;
+        zoom:.5;
+        -webkit-transform: scale(.5);  /* iPhone Safari browser specific */
+        -o-transform: scale(.5);
+        -moz-transform: scale(.5);
+    }
+
+
 }
 
 /* Landscape */
@@ -122,6 +223,29 @@ and (min-device-width: 414px)
 and (max-device-width: 736px)
 and (-webkit-min-device-pixel-ratio: 3)
 and (orientation: portrait) {
+    ul.button li a,.buttonDefault {
+        font-size:1em;
+        padding:6px 6px 0;
+    }
+    .popUpBox h2 {
+        font-size:20px;
+    }
+    
+    .popUpBox>div> div {
+        font-size:1em;
+    }
+    .homePage .play img {
+        width: 40%;
+    }
+    .playArea {
+        width: 40%;
+        zoom:.5;
+        -webkit-transform: scale(.5);  /* iPhone Safari browser specific */
+        -o-transform: scale(.5);
+        -moz-transform: scale(.5);
+    }
+
+
     
 }
 
@@ -142,24 +266,24 @@ and (min-device-width: 768px)
 and (max-device-width: 1024px)
 and (orientation: portrait)
 and (-webkit-min-device-pixel-ratio: 1) {
-    canvas#canvas {
+   /* canvas#canvas {
         width: 710px;
         height: 850px;
         left: 4%;
-        /*border:2px solid red;*/
+        /*border:2px solid red;
     }
     canvas#image {
-        /*background-color: yellow;*/
+        /*background-color: yellow;
         width: 700px;
         height: 900px;
         left: 2%;
     }
     canvas#image-preview {
-       /* background-color: green;*/
+       /* background-color: green;
         width: 700px;
         height: 900px;
         left: 2%;
-    }
+    }*/
 
 .toolBar li div img {
     width: 35%;
@@ -180,6 +304,10 @@ ul.button {
 .gallery li a{
     height:248px;
 }
+canvas#canvas.loading {
+    left: 40%;
+    top: 40%;
+}
 }
 
 /* Landscape */
@@ -190,7 +318,7 @@ and (orientation: landscape)
 and (-webkit-min-device-pixel-ratio: 1) {
     /*.pageHeader.slideDock.topvalue{top:-100px;}*/
     /* .gallery li a { height: 86px }*/
-    canvas#canvas {
+   /* canvas#canvas {
         width: 980px;
         height: 600px;
         left: 2%;
@@ -204,7 +332,7 @@ and (-webkit-min-device-pixel-ratio: 1) {
         width: 980px;
         height: 600px;
         left: 2%;
-    }
+    }*/
     .toolBar li div img {
         width: 25%;
     }
@@ -234,7 +362,7 @@ and (min-device-width: 768px)
 and (max-device-width: 1024px)
 and (orientation: portrait)
 and (-webkit-min-device-pixel-ratio: 2) {
-    canvas#canvas {
+   /* canvas#canvas {
         width: 710px;
         height: 800px;
         left: 2%;
@@ -248,7 +376,7 @@ and (-webkit-min-device-pixel-ratio: 2) {
         width: 700px;
         height: 980px;
         left: 2%;
-    }
+    }*/
 
 .toolBar li div img {
     width: 35%;
@@ -269,6 +397,12 @@ ul.button {
 .gallery li a{
     height:248px;
 }
+
+canvas#canvas.loading {
+    left: 40%;
+    top: 40%;
+}
+
 }
 
 /* Landscape */
@@ -279,7 +413,7 @@ and (orientation: landscape)
 and (-webkit-min-device-pixel-ratio: 2) {
     /* .pageHeader.slideDock.topvalue{top:-100px;}*/
      /* .gallery li a { height: 86px }*/
-     canvas#canvas {
+     /*canvas#canvas {
          width: 980px;
          height: 600px;
          left: 2%;
@@ -293,7 +427,7 @@ and (-webkit-min-device-pixel-ratio: 2) {
          width: 980px;
          height: 600px;
          left: 2%;
-     }
+     }*/
 
 .toolBar li div img {
     width: 25%;

@@ -5,27 +5,34 @@
             <meta name="msapplication-tap-highlight" content="no">
                     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width"/>
                     <title>PicPuzzle</title>
-                    <!-- Bootstrap -->
+                    <!--Bootstrap -->
+                    <script type="text/javascript" src="js/jquery.min.js"></script>
+                    <script type="text/javascript" src="js/jquery.timer.js"></script>
+                    
                     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
                     <link rel="stylesheet" type="text/css" href="css/index.css">
-               <!-- <link rel="stylesheet" type="text/css" href="css/android.css">-->
                     <link rel="stylesheet" type="text/css" href="css/ios.css">
     </head>
     <body onload="onLoad()">
+        <audio id="musicSound" src="audio/music.mp3" type="audio/mp3" ></audio>
+        <audio id="joinSound" src="audio/join.mp3" type="audio/mp3" ></audio>
         <div class="layout">
-            <!--<div class="loading"></div>-->
-            <div class="homePage animatedlinear fadeInRight" style="display:none;">
-                <span class="play animated pulse" id="play"><a href="#"><img src="images/play.png"/></a></span>
+            <div class="homePage" style="display:none;">
+                <span class="play animated pulse"><img src="images/play.png" usemap="#Map"  id="play"/>
+                    <map name="Map" id="Map">
+                        <area class="playArea" alt="" title="" href="#" shape="poly" coords="140,11,153,17,159,29,154,39,148,48,147,53,152,61,221,61,219,115,226,123,233,122,247,111,262,115,267,128,266,137,254,147,246,147,236,142,229,136,222,138,220,143,221,200,150,200,146,203,149,212,157,222,155,240,140,247,126,241,121,230,127,216,133,210,132,202,126,199,61,200,60,142,52,137,43,140,32,148,21,145,13,136,13,126,18,117,28,113,36,113,46,118,50,123,55,124,60,120,60,62,82,62,95,61,108,62,117,62,128,62,133,52,129,44,122,31,126,19" />
+                    </map>
+                </span>
                 <div class="homePageButton proVersion">Pro Version</div>
-                <a href="#" class="homePageButton info"><img src="images/info.png" /> </a>
+                <a href="#" class="homePageButton info"><img src="images/info.png"/> </a>
                 <div class="homePageButton settings">Settings</div>
-                <div class="infoMsg">If you receive image from your friend <a href="#" id="playWithCode">Click here </a>to play</div>
+                <div class="infoMsg">If you receive image from your friend <a href="#" id="reciviedToken">Click here </a>to play</div>
             </div>
             <div class="imgSelectPage paddingTop animatedlinear fadeInRight" style="display:none;" id="imgSelectPage">
-                <div class="pageHeader">
+              <div class="pageHeader">
                     <div class="tableCover">
                         <span class="tableCell text-left">
-                            <a href="#" class="links navImageBackButton">Back</a>
+                            <a href="#" class=" glyphicon glyphicon-share-alt links ImageBackButton" aria-hidden="true"></a>
                         </span>
                     </div>
                 </div>
@@ -35,7 +42,9 @@
                         <li><a href="#" class="openGallery reduceTextSize" onclick="getPhoto(pictureSource.PHOTOLIBRARY);">Choose from Gallery</a></li>
                     </ul>
                     <br>
+                
                     <h3 class="whiteTitle">Available Images</h3>
+                    <h4 class="goldTitle">Free Images</h4>
                     <div class="galleryCover"  style="overflow:hidden;">
                         <div  id="slider">
                             <ul class="gallery" id="galleryAvilabelList">
@@ -48,7 +57,7 @@
                     <div class="galleryCover">
                         <div  id="slider2">
                             <ul class="gallery" id="galleryPaidlList">
-                                <li id="1">
+                               <!-- <li id="1">
                                     <a   onClick=ImageClick("1") href="#"><img src="puzzlepictures/puzzle1.jpg"/></a>
                                 </li>
                                 <li id="2">
@@ -59,7 +68,7 @@
                                 </li>
                                 <li id="4">
                                     <a   onClick=ImageClick("4") href="#"><img src="puzzlepictures/puzzle4.jpg"/></a>
-                                </li>
+                                </li>-->
                             </ul>
                         </div>
                         <a href="#" class="control_prev_second"> < </a>
@@ -92,7 +101,7 @@
                 <div class="pageHeader">
                     <div class="tableCover">
                         <span class="tableCell text-left">
-                            <a href="#" class=" links navShapeBackButton">Back</a>
+                            <a href="#" class=" glyphicon glyphicon-share-alt links ShapeBackButton" aria-hidden="true"></a>
                         </span>
                         <span class="tableCell text-right">
                         </span>
@@ -100,14 +109,10 @@
                 </div>
                 <div class="tableCell">
                     <ul class="shapes" id="shapes">
-                        <li id="1">
+                       <!-- <li id="1">
                             Free
                             <div><img src="images/sh1.png"/></div>
                         </li>
-                       <!-- <li id="2">
-                            Free
-                            <div><img src="images/sh2.png"/></div>
-                        </li>-->
                         <li id="2">
                             Free
                             <div><img src="images/sh2.png"/></div>
@@ -123,9 +128,7 @@
                         <li id="5">
                             Purchased
                             <div><img src="images/sh5.png"/></div>
-                        </li>
-                        <!--<li id="5">Free<div><img src="images/sh5.png"/></div></li>-->
-                        <!--<li id="8">Purchased<div><img src="images/sh8.png"/></div></li>-->
+                        </li>-->
                     </ul>
                 </div>
             </div>
@@ -133,7 +136,7 @@
                 <div class="pageHeader">
                     <div class="tableCover">
                         <span class="tableCell text-left">
-                            <a href="#" class="links navSettingsBackButton">Back</a>
+                            <a href="#" class=" glyphicon glyphicon-share-alt links SettingsBackButton" aria-hidden="true"></a>
                         </span>
                     </div>
                 </div>
@@ -141,41 +144,74 @@
                     <ul class="settingsButtons">
                         <li>
                             Sound
-                            <div id="settingsSound"><img src="images/soundOn.png"/></div>
+                            <div id="settingsSound"><img src=""/></div>
                         </li>
                         <li>
                             Rotate Pieces
-                            <div id="settingsRotation"><img src="images/autoRotateOff.png"/></div>
+                            <div id="settingsRotation"><img src=""/></div>
                         </li>
                         <li>
                             Shape
-                            <div id="settingsShape"><img src="images/shape1.png"/></div>
+                            <div id="settingsShape"><img src=""/></div>
                         </li>
                         <li>
                             Level
-                            <div id="settingsLevel"><img src="images/hard.png"/></div>
+                            <div id="settingsLevel"><img src=""/></div>
                         </li>
                     </ul>
                     <br><br>
                     <a href="#" class="playGame buttonDefault">Play</a><br><br>
                 </div>
             </div>
+            
+            <div class="sendPuzzlePage paddingTop animatedlinear fadeInRight" style="display: none;">
+            <div class="pageHeader">
+                <div class="tableCover">
+                    <span class="tableCell text-left"> <a href="#"
+                        class="glyphicon glyphicon-share-alt links SendBackButton" aria-hidden="true"></a>
+                    </span>
+                </div>
+            </div>
+            <div class="tableCell text-center">
+                <ul class="settingsButtons">
+                    <li>Contacts
+                        <div id="">
+                            <img src="images/contact.png" />
+                        </div>
+                    </li>
+                    <li>Level
+                        <div id="settingsLevelSend">
+                            <img src="" />
+                        </div>
+                    </li>
+                    <li>Shape
+                        <div id="settingsShapeSend">
+                            <img src="" />
+                        </div>
+                    </li>
+                    
+                </ul>                <br>
+                <br> <a href="#" class="sendGame  buttonDefault">Send</a><br>
+                <br>
+            </div>
+            </div>
+        
             <div class="gamePage paddingTop animatedlinear fadeInRight" id="gamePage" style="display:none;">
                 <div class="pageHeader">
                     <div class="tableCover">
                         <span class="tableCell">
                             <a href="#" style="color:#fff;">Level :<span class="styled-select">
-                                <select id="set-parts">
-                                </select>
+                               <select id="set-parts">
+                               </select>
                             </span></a>
                         </span>
-                        <span class="tableCell"><a href="#" style="color:#fff;">Time : <span id="clock">00:00:00</span></a></span>
+                        <span class="tableCell"><a href="#" style="color:#fff;">Time : <span id="stopwatch">00:00:00</span></a></span>
                     </div>
                 </div>
-                <div id="canvas-wrap" class="paddingTop">
-                    <canvas id="canvas"></canvas>
-                    <canvas class="hide" id="image"></canvas>
-                    <canvas class="hide" id="image-preview"></canvas>
+                <div id="canvas-wrap" class="paddingTop" style="overflow-x: visible">
+                    <canvas id="canvas" width="800"></canvas>
+                    <canvas class="hide" id="image" width="800"></canvas>
+                    <canvas class="hide" id="image-preview" style="position: relative;top:10%;margin: auto;"></canvas>
                 </div>
                 <ul class="toolBar" id="game-options">
                     <li class="showImg">
@@ -187,25 +223,26 @@
                     <li class="settingsMini">
                         <div id="change_settings"><img src="images/settingsMini.png"/>Settings</div>
                     </li>
-                    <li class="autoSolveMini">
-                        <div id="auto_solve"><img src="images/autoSolveMini.png" />Auto Solve</div>
-                    </li>
+                    <!--<li class="autoSolveMini">
+                        <a id="SHOW_ALL"><img src="images/autoSolveMini.png" />Auto Solve</a>
+                    </li>-->
                 </ul>
             </div>
             <div class="registerPage paddingTop animatedlinear fadeInRight" style="display:none;">
                 <div class="pageHeader">
                     <div class="tableCover">
-                        <span class="tableCell text-left"><a href="#" class="links">Register</a></span>
-                        <span class="tableCell text-right"></span>
+                        <span class="tableCell text-left"> <a href="#"
+                            class="glyphicon glyphicon-share-alt links SendBackButton" aria-hidden="true"></a>
+                        </span>
                     </div>
                 </div>
                 <div class="tableCell">
                     <ul class="inputBoxes button">
-                        <li><input type="text" value="First Name"/></li>
-                        <li><input type="text" value="Last Name"/></li>
-                        <li><input type="text" value="Mobile No"/></li>
-                        <li><input type="text" value="Email"/></li>
-                        <li><input type="text" value="Password"/></li>
+                        <li><input type="text" placeholder="First Name" id="fname"/></li>
+                        <li><input type="text" placeholder="Last Name" id="lname" /></li>
+                        <li><input type="number" placeholder="Phone Number" id="mobileNo" /></li>
+                        <li><input type="text" placeholder="Email" id="email"/></li>
+                        <li><input type="password" placeholder="Password"  id="password"/></li>
                         <li><a href="#" class="registerButton">Register</a></li>
                     </ul>
                 </div>
@@ -215,7 +252,7 @@
                 <div class="tableCover">
                     <div class="tableCell">
                         <div class="popUpBox">
-                            <div id="congrat_message" style="display:none">
+                            <div class="congrat" id="congrat_message" style="display:none">
                                 <h2>Congratulations!</h2>
                                 <div>
                                     <span class="goldText">You solved it in</span>
@@ -229,11 +266,30 @@
                                 </div>
                                 <!-- <div class="killMe">X</div>-->
                             </div>
+                            
+                            <div class="recivied" id="recivied_token" style="display: none">
+                                <h2>Enter the code!</h2>
+                                <div>
+                                    
+                                    <h3>
+                                        <input type="text" name="token" id="token"  style="color: black;"><br>
+                                            </h3>
+                                    <br>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" >
+                                        <a href="#" id="downloadImage" class="buttonDefault buttonFontSize">Play</a>
+                                    </div>
+                                    
+                                </div>
+                                <div class="killMe">X</div>
+                            </div>
+                            
                             <div class="imgPopUp" id="send_image" style="display:none">
                                 <img src="" id="picture" width="150" height="150"/>
                                 <div class="row">
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"><a href="#" class="buttonDefault">Play</a></div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"><a href="#" class="buttonDefault">Send</a></div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 playPuzzle"><a href="#" class="buttonDefault">Play</a></div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 sendPuzzle"><a href="#" class="buttonDefault">Send</a></div>
                                 </div>
                                 <div class="killMe">X</div>
                             </div>
@@ -249,12 +305,16 @@
         <div class="join_animation" id="star" style="display:none;z-index:3000;">
             <img src="images/flashypink.gif" style="border:0;"></img>
         </div>
+        
+        <div class="progressBar" style="display: none;z-index: 3000;">
+            <img src="images/loader.gif" style="border:0;"></img>
+        </div>
+        
         <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/jquery.min.js"></script>
-        <script type="text/javascript" src="js/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/event-emiter.min.js"></script>
         <script type="text/javascript" src="js/canvas-event.min.js"></script>
         <script type="text/javascript" src="js/canvas-puzzle.min.js"></script>
+           <script type="text/javascript" src="js/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
     </body>
 </html>
