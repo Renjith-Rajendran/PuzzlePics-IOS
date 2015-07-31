@@ -954,8 +954,9 @@ function onError(error) {
 //--------------------------------------------------------------------------------------------------------
 
 $('.sendPuzzle').click( function(e){
-                       console.log("check");
+                       console.log("sendPuzzle click");
                        // sendPuzzleShow();
+                        window.localStorage.removeItem("contacNumber");
                        $('.settingsPage,.chooseShapePage,.homePage,.gamePage,.loginPage,.registerPage,.imgSelectPage,.imgPopUp,.popUpCov').hide();
                        $('.progressBar').show();
                        $.ajax(
@@ -974,8 +975,6 @@ $('.sendPuzzle').click( function(e){
                               alert('error');
                               }
                               });
-                       
-                       
                        });
 
 function registrationStaus(msg)
@@ -1117,8 +1116,13 @@ function onFail(message) {
 
 
 $('.sendGame').click( function(e){
-                     alert("sending puzzle");
+                     console.log("sending puzzle");
+                     if((window.localStorage["contacNumber"] == undefined) || (window.localStorage["contacNumber"] == null)){
+                     alert("Please choose a contact number to send the puzzle.");
+                     }
+                     else{
                      uploadPhoto();
+                     }
                      });
 
 function uploadPhoto() {
@@ -1134,12 +1138,14 @@ function uploadPhoto() {
     options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
     options.mimeType="image/jpeg";
     
-     console.log("imageURI upload "+ imageURI);
-     console.log("Puzzle_LevelId "+ window.localStorage["Puzzle_LevelId"]);
-     console.log("Puzzle_ShapeId "+ window.localStorage["Puzzle_ShapeId"]);
+    console.log("imageURI upload "+ imageURI);
+    console.log("Puzzle_LevelId "+ window.localStorage["Puzzle_LevelId"]);
+    console.log("Puzzle_ShapeId "+ window.localStorage["Puzzle_ShapeId"]);
+    console.log("Contact Number "+ window.localStorage["contacNumber"]);
+    console.log("Device ID "+ device_id);
     
     var params = new Object();
-    params.contactNo = "999999999";
+    params.contactNo = window.localStorage["contacNumber"];
     params.levelId = window.localStorage["Puzzle_LevelId"];
     params.shapeId = window.localStorage["Puzzle_ShapeId"];
     params.deviceId = device_id;
@@ -1150,16 +1156,54 @@ function uploadPhoto() {
 }
 
 function win(r) {
-     $('.progressBar').hide();
     console.log("Code = " + r.responseCode);
     console.log("Response = " + r.response);
+    $('.progressBar').hide();
+    var strResult = JSON.stringify(r);
+    console.log("Response =" + r.response);
+    console.log("Token =" + JSON.parse(r.response).data[0].Token);
+    var tokenid = JSON.parse(r.response).data[0].Token;
+    sendSms(tokenid);
     console.log("Sent = " + r.bytesSent);
+}
+
+function sendSms(tokenid)
+{
     $('.settingsPage,.chooseShapePage,.homePage,.gamePage,.loginPage,.registerPage,.sendPuzzlePage').hide();
     $('.imgSelectPage').show();
+    console.log("sending sms "+ tokenid);
+    var number = window.localStorage["contacNumber"];
+    var message = "You have the new image form the Puzzlepics for downloading the image use this Token Id: "+ tokenid;
+    console.log("going to send "+message+" to "+number);
+
+    //simple validation for now
+    //if(number === '' || message === '') return;
+    var msg = {
+    phoneNumber:number,
+    textMessage:message
+    };
+
+    sms.sendMessage(msg, function(message) {
+                 console.log("success: " + message);
+                 navigator.notification.alert(
+                                              'Message to ' + number + ' has been sent.',
+                                              null,
+                                              'Message Sent',
+                                              'Done'
+                                              );
+                 
+                 }, function(error) {
+                 console.log("error: " + error.code + " " + error.message);
+                 navigator.notification.alert(
+                                              'Sorry, message not sent: ' + error.message,
+                                              null,
+                                              'Error',
+                                              'Done'
+                                              );
+                 });
 }
 
 function fail(error) {
-    $('.progressBar').hide();
     alert("An error has occurred: Code = " + error.code);
     console.log("upload error source " + error.source);
     console.log("upload error target " + error.target);
@@ -2138,3 +2182,74 @@ function getImagesServer_success(tx, results) {
     $('.imgSelectPage').show();
 }
 /* End Image parsed form the server */
+                     
+/* Start Contact List  */
+
+$('#contactList').click( function(e){
+    alert("check contacts");
+    $('.progressBar').show();
+    $('.settingsPage,.chooseShapePage,.homePage,.gamePage,.loginPage,.registerPage,.sendPuzzlePage').hide();
+    $('.contactListSelction').show();
+    fecthConatcts();
+});
+
+function fecthConatcts()
+{
+    var options = new ContactFindOptions();
+    options.filter="";        // empty search string returns all contacts
+    options.multiple=true;
+    filter  = ["displayName", "phoneNumbers","name"];
+    navigator.contacts.find(filter, onSuccessContacts, onErrorContacts, options);
+}
+var cSort = function(a, b) {
+    aName = a.displayName ;
+    bName = b.displayName ;
+    return aName < bName ? -1 : (aName == bName ? 0 : 1);
+};
+
+// onSuccess: Get a snapshot of the current contacts
+function onSuccessContacts(contacts) {
+    $('.progressBar').hide();
+  //  contacts = contacts.sort(cSort);
+    //alert("length " + contacts.length  );
+    var i =0;
+    for (var i = 0; i < contacts.length; i++)
+    {
+        //console.log("Display Name = " + contacts[i].displayName);
+        console.log("Formatted: " + contacts[i].name.formatted       + " : " +
+              "Family Name: " + contacts[i].name.familyName      + " : " +
+              "Given Name: "  + contacts[i].name.givenName);
+        if(contacts[i].name.formatted != null)
+        {
+            if( contacts[i].phoneNumbers == null )
+                continue;
+            else if(contacts[i].phoneNumbers.length)
+            {
+                var finalList = '';
+                listEntryPoint = $('#conactAvilabelList');
+                for (var j=0; j<contacts[i].phoneNumbers.length; j++)
+                {
+                    console.log("Type: "      + contacts[i].phoneNumbers[j].type  + "\n" +
+                          "Value: "     + contacts[i].phoneNumbers[j].value + "\n" +
+                          "Preferred: " + contacts[i].phoneNumbers[j].pref);
+                var newlist = '<li onClick="sendContactNumber('+ contacts[i].phoneNumbers[j].value  +')" > Name:'+contacts[i].name.formatted+'</li>' + '<li onClick="sendContactNumber('+ contacts[i].phoneNumbers[j].value  +')"> Number:'+contacts[i].phoneNumbers[j].value+'</li><br><br>';
+
+                $('#conactAvilabelList').append(newlist);
+                }
+            }
+        }
+    }
+}
+
+// onError: Failed to get the contacts
+function onErrorContacts(contactError) {
+alert('onErrorContacts!' + contactError);
+}	
+
+function sendContactNumber(number){
+$('.settingsPage,.chooseShapePage,.homePage,.gamePage,.loginPage,.registerPage,.contactListSelction').hide();
+$('.sendPuzzlePage').show();
+window.localStorage.setItem("contacNumber",number);
+}
+/* End Contact List*/
+

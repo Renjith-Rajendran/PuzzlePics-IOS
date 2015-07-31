@@ -175,7 +175,7 @@
             <div class="tableCell text-center">
                 <ul class="settingsButtons">
                     <li>Contacts
-                        <div id="">
+                        <div id="contactList">
                             <img src="images/contact.png" />
                         </div>
                     </li>
@@ -190,11 +190,23 @@
                         </div>
                     </li>
                     
-                </ul>                <br>
+                </ul>
+                <br>
                 <br> <a href="#" class="sendGame  buttonDefault">Send</a><br>
                 <br>
             </div>
             </div>
+        
+        <div class="contactListSelction paddingTop animatedlinear fadeInRight" style="display: none;">
+            <div class="pageHeader">
+                <div class="tableCover">
+                    <span class="tableCell text-left"> <a href="#" class="glyphicon glyphicon-share-alt links ConatctBackButton" aria-hidden="true"></a>
+                    </span>
+                </div>
+            </div>
+            <ul  data-role="listview" id="conactAvilabelList" data-theme="a" style="list-style-type: none;">
+            </ul>
+        </div>
         
             <div class="gamePage paddingTop animatedlinear fadeInRight" id="gamePage" style="display:none;">
                 <div class="pageHeader">

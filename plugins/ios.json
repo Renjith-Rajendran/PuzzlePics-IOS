@@ -7,9 +7,9 @@
         "files": {
             "framework": {
                 "parents": {
-                    "SystemConfiguration.framework": [
+                    "StoreKit.framework": [
                         {
-                            "xml": true,
+                            "xml": false,
                             "count": 1
                         }
                     ],
@@ -34,7 +34,7 @@
                     "AssetsLibrary.framework": [
                         {
                             "xml": false,
-                            "count": 2
+                            "count": 3
                         }
                     ],
                     "MobileCoreServices.framework": [
@@ -54,6 +54,12 @@
                             "xml": true,
                             "count": 1
                         }
+                    ],
+                    "SystemConfiguration.framework": [
+                        {
+                            "xml": true,
+                            "count": 1
+                        }
                     ]
                 }
             },
@@ -61,7 +67,7 @@
                 "parents": {
                     "/*": [
                         {
-                            "xml": "<feature name=\"NetworkStatus\"><param name=\"ios-package\" value=\"CDVConnection\" /></feature>",
+                            "xml": "<feature name=\"InAppPurchase\"><param name=\"ios-package\" value=\"InAppPurchase\" /></feature>",
                             "count": 1
                         },
                         {
@@ -73,15 +79,7 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"File\"><param name=\"ios-package\" value=\"CDVFile\" /><param name=\"onload\" value=\"true\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Capture\"><param name=\"ios-package\" value=\"CDVCapture\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Media\"><param name=\"ios-package\" value=\"CDVSound\" /></feature>",
+                            "xml": "<feature name=\"Console\"><param name=\"ios-package\" value=\"CDVLogger\" /></feature>",
                             "count": 1
                         },
                         {
@@ -89,11 +87,35 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"SplashScreen\"><param name=\"ios-package\" value=\"CDVSplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "xml": "<feature name=\"File\"><param name=\"ios-package\" value=\"CDVFile\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"FileTransfer\"><param name=\"ios-package\" value=\"CDVFileTransfer\" /></feature>",
                             "count": 1
                         },
                         {
                             "xml": "<feature name=\"InAppBrowser\"><param name=\"ios-package\" value=\"CDVInAppBrowser\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Media\"><param name=\"ios-package\" value=\"CDVSound\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Capture\"><param name=\"ios-package\" value=\"CDVCapture\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"NetworkStatus\"><param name=\"ios-package\" value=\"CDVConnection\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"ios-package\" value=\"CDVSplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"ios-package\" value=\"CDVDevice\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -112,34 +134,45 @@
         }
     },
     "installed_plugins": {
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.polus.puzzlepic"
-        },
-        "cordova-plugin-network-information": {
+        "cc.fovea.cordova.purchase": {
             "PACKAGE_NAME": "com.polus.puzzlepic"
         },
         "cordova-plugin-camera": {
             "PACKAGE_NAME": "com.polus.puzzlepic"
         },
-        "cordova-plugin-media-capture": {
-            "PACKAGE_NAME": "com.polus.puzzlepic"
-        },
-        "cordova-plugin-media": {
+        "cordova-plugin-console": {
             "PACKAGE_NAME": "com.polus.puzzlepic"
         },
         "cordova-plugin-contacts": {
             "PACKAGE_NAME": "com.polus.puzzlepic"
         },
-        "cordova-plugin-splashscreen": {
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.polus.puzzlepic"
+        },
+        "cordova-plugin-file-transfer": {
             "PACKAGE_NAME": "com.polus.puzzlepic"
         },
         "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "com.polus.puzzlepic"
-        }
-    },
-    "dependent_plugins": {
-        "cordova-plugin-file": {
+        },
+        "cordova-plugin-media": {
+            "PACKAGE_NAME": "com.polus.puzzlepic"
+        },
+        "cordova-plugin-media-capture": {
+            "PACKAGE_NAME": "com.polus.puzzlepic"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.polus.puzzlepic"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.polus.puzzlepic"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.polus.puzzlepic"
+        },
+        "org.apache.cordova.device": {
             "PACKAGE_NAME": "com.polus.puzzlepic"
         }
-    }
+    },
+    "dependent_plugins": {}
 }
